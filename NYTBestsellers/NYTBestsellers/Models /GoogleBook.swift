@@ -1,5 +1,5 @@
 //
-//  BookType.swift
+//  Catagories.swift
 //  NYTBestsellers
 //
 //  Created by Manny Yusuf on 1/25/19.
@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+struct GoogleBooks: Codable {
+    
+}

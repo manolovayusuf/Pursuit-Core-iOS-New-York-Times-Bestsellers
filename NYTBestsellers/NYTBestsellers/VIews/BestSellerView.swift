@@ -9,40 +9,67 @@
 import UIKit
 
 class BestSellerView: UIView {
-
-    lazy var myCollectionView: UICollectionView = {
+    
+    public lazy var bestSellerCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize.init(width: 100, height: 100)
+        layout.itemSize = CGSize.init(width: 200, height: 300)
         layout.sectionInset = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10)
+        layout.scrollDirection = .horizontal
+        
         
         let cv = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(BestsellerCollectionViewCell.self, forCellWithReuseIdentifier: "BestSeller")
         cv.backgroundColor = .white
         return cv
+        
+    }()
+    
+    public lazy var bookPicker: UIPickerView = {
+        let picker = UIPickerView()
+        return picker
     }()
     
     override init(frame: CGRect){
-        super.init(frame: frame)
-        self.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        setupCollectionView()
+        super.init(frame: UIScreen.main.bounds)
+        self.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.937254902, blue: 0.9568627451, alpha: 1)
+        commonInit()
+        
     }
     
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+    private func commonInit() {
+        setupCollectionView()
+        setupPickerView()
     }
     
     private func setupCollectionView () {
-        addSubview(myCollectionView)
+        addSubview(bestSellerCollection)
         
-        myCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        myCollectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
-        
-        myCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        
-        myCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-    myCollectionView.heightAnchor.constraint(equalTo:safeAreaLayoutGuide.heightAnchor, multiplier: 0.5).isActive = true
+        bestSellerCollection.translatesAutoresizingMaskIntoConstraints = false
+        bestSellerCollection.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
+        bestSellerCollection.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        bestSellerCollection.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        bestSellerCollection.heightAnchor.constraint(equalTo:safeAreaLayoutGuide.heightAnchor, multiplier: 0.5).isActive = true
         
     }
+    
+    func setupPickerView() {
+        addSubview(bookPicker)
+        bookPicker.translatesAutoresizingMaskIntoConstraints = false
+        bookPicker.topAnchor.constraint(equalTo: bestSellerCollection.bottomAnchor).isActive = true
+        bookPicker.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        bookPicker.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        bookPicker.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true 
+    }
+    
+    
+    
 }
+
+
+
+

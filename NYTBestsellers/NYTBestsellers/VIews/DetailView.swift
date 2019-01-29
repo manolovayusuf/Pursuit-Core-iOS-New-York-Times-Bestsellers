@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FavoritesDetailView: UIView {
+class DetailView: UIView {
 
     /*
     // Only override draw() if you perform custom drawing.
