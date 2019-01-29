@@ -18,6 +18,15 @@ class BestsellersViewController: UIViewController {
         }
     }
     
+    public var bookInfo = [Books]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.bestseller.bestSellerCollection.reloadData()
+            }
+        }
+    }
+    
+    
     let bestseller = BestSellerView() 
     let detailsViewController = DetailViewController()
     
@@ -27,6 +36,7 @@ class BestsellersViewController: UIViewController {
         view.addSubview(bestseller)
         title = "NYT Bestsellers"
         getPickerCategories()
+        setupBookLabel(genre: "Manga")
         bestseller.bestSellerCollection.dataSource = self
         bestseller.bestSellerCollection.delegate = self
         bestseller.bookPicker.delegate = self
@@ -42,6 +52,21 @@ private func getPickerCategories() {
         }
     }
 }
+    
+    private func setupBookLabel(genre: String) {
+        NYTBookAPI.bookResults(listName: genre) { (appError, bookNames) in
+            if let appError = appError {
+                print("App Error is \(appError)")
+            } else if let bookNames = bookNames {
+                self.bookInfo = bookNames
+                dump(self.bookInfo)
+            }
+        }
+    }
+    
+//    private func getBookImage() {
+//
+//    }
 
 private func setPickerCategories() {
     NYTBookAPI.getBookCategories { (appError, results) in
@@ -56,19 +81,23 @@ private func setPickerCategories() {
 
 extension BestsellersViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return bookInfo.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BestSeller", for: indexPath) as? BestsellerCollectionViewCell else {
             return UICollectionViewCell() }
+
+        let currentBooks = bookInfo[indexPath.row]
+        cell.bestSellerLabel.text = "\(currentBooks.weeks_on_list) weeks on the Bestseller's list"
+        cell.briefDescription.text = currentBooks.book_details[0].description
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let mainStoryboard = UIStoryboard.init(name: "Manin", bundle: nil)
+        let mainStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
         guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else { fatalError("Detail View is nil") }
-        
+
     }
 }
 

@@ -19,13 +19,13 @@ class BestsellerCollectionViewCell: UICollectionViewCell {
         
         public lazy var bestSellerLabel: UILabel = {
             let label = UILabel()
-            label.text = "Best Seller Time Length"
+//            label.text = "Best Seller Time Length"
             label.isEnabled = true
             return label
         }()
         
-        public lazy var briefDescription: UITextField = {
-            let bd = UITextField()
+        public lazy var briefDescription: UITextView = {
+            let bd = UITextView()
             bd.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
             bd.textColor = .black
             return bd

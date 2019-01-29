@@ -31,7 +31,7 @@ struct NYTBestsellers: Codable {
         let price: Double
         let publisher: String
         let primary_isbn13: String
-        let letprimary_isbn10: String
+//        let letprimary_isbn10: String
         
     }
 
