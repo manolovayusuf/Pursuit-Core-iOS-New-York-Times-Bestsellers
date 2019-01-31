@@ -11,3 +11,8 @@ import Foundation
 class SecretKeys {
     static let bookKey = "Q3NSaRBWSIZSQamQ5CzIgZEPqLLGiXAm"
 }
+
+struct GenreKey {
+    static var defaultGenre = "Default Genre"
+    static var pickerRow = "Selection Row"
+}

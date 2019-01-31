@@ -10,7 +10,7 @@ import UIKit
 
 class BestsellersViewController: UIViewController {
 
-    public var picker = [Results]() {
+    public var genrePicker = [Results]() {
         didSet {
             DispatchQueue.main.async {
                 self.bestseller.bookPicker.reloadAllComponents()
@@ -36,11 +36,15 @@ class BestsellersViewController: UIViewController {
         view.addSubview(bestseller)
         title = "NYT Bestsellers"
         getPickerCategories()
-        setupBookLabel(genre: "Manga")
+        setupBooks(genre: "Manga")
         bestseller.bestSellerCollection.dataSource = self
         bestseller.bestSellerCollection.delegate = self
         bestseller.bookPicker.delegate = self
         bestseller.bookPicker.dataSource = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        userDefaults()
     }
 
 private func getPickerCategories() {
@@ -48,12 +52,12 @@ private func getPickerCategories() {
         if let appError = appError {
             print("App Error is \(appError)")
         } else if let results = results {
-            self.picker = results
+            self.genrePicker = results
         }
     }
 }
     
-    private func setupBookLabel(genre: String) {
+    public func setupBooks(genre: String) {
         NYTBookAPI.bookResults(listName: genre) { (appError, bookNames) in
             if let appError = appError {
                 print("App Error is \(appError)")
@@ -64,10 +68,24 @@ private func getPickerCategories() {
         }
     }
     
+    private func userDefaults() {
+        if let userKeyword: String = UserDefaults.standard.object(forKey: SecretKeys.bookKey) as? String {
+            setupBooks(genre: userKeyword.replacingOccurrences(of: " ", with: "-"))
+            if let pickerSelection = (UserDefaults.standard.object(forKey: GenreKey.pickerRow) as? String) {
+                DispatchQueue.main.async {
+                    self.bestseller.bookPicker.selectRow(Int(pickerSelection)!, inComponent: 0, animated: true)
+                }
+            }
+        }
+    }
+    
 //    private func getBookImage() {
 //
 //    }
 
+    
+    
+    
 private func setPickerCategories() {
     NYTBookAPI.getBookCategories { (appError, results) in
         if let appError = appError {
@@ -103,7 +121,7 @@ extension BestsellersViewController: UICollectionViewDataSource, UICollectionVie
 
 extension BestsellersViewController: UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return picker.count
+        return genrePicker.count
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -113,9 +131,27 @@ extension BestsellersViewController: UIPickerViewDataSource {
 
 extension BestsellersViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return picker[row].display_name
+        return genrePicker[row].list_name
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        setupBooks(genre: genrePicker[row].list_name.replacingOccurrences(of: " ", with: "-"))
+        
     }
 }
 
 
 
+//extension BestSellerViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+//    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+//        return 1
+//    }
+//    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+//        return genreList.count
+//    }
+//    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+//        return genreList[row].list_name
+//    }
+//    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+//        getBooks(keyword: genreList[row].list_name.replacingOccurrences(of: " ", with: "-"))
+//}
