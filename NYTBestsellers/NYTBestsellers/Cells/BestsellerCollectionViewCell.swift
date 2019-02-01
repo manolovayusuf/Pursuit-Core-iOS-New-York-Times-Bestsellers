@@ -11,7 +11,7 @@ import UIKit
 class BestsellerCollectionViewCell: UICollectionViewCell {
 
         public lazy var bookImage: UIImageView = {
-            let image = UIImageView(image: UIImage(named: "cyclist"))
+            let image = UIImageView(image: UIImage(named: ""))
             image.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
             return image
         }()
@@ -19,7 +19,7 @@ class BestsellerCollectionViewCell: UICollectionViewCell {
         
         public lazy var bestSellerLabel: UILabel = {
             let label = UILabel()
-//            label.text = "Best Seller Time Length"
+            label.text = "Best Seller Time Length"
             label.isEnabled = true
             return label
         }()
@@ -27,6 +27,7 @@ class BestsellerCollectionViewCell: UICollectionViewCell {
         public lazy var briefDescription: UITextView = {
             let bd = UITextView()
             bd.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+            bd.text = "HELLO IM MANNY YOUR OVERLORD!!! o_o"
             bd.textColor = .black
             return bd
         }()

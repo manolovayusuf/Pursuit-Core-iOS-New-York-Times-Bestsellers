@@ -26,6 +26,14 @@ class BestsellersViewController: UIViewController {
         }
     }
     
+    public var detailBookInfo = [BookDetail]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.bestseller.bestSellerCollection.reloadData()
+            }
+        }
+    }
+    
     
     let bestseller = BestSellerView() 
     let detailsViewController = DetailViewController()
@@ -109,12 +117,38 @@ extension BestsellersViewController: UICollectionViewDataSource, UICollectionVie
         let currentBooks = bookInfo[indexPath.row]
         cell.bestSellerLabel.text = "\(currentBooks.weeks_on_list) weeks on the Bestseller's list"
         cell.briefDescription.text = currentBooks.book_details[0].description
+        
+        GoogleAPIClient.getImage(keyword: currentBooks.book_details[0].primary_isbn13) { (appError, image) in
+            if let appError = appError {
+                DispatchQueue.main.async {
+                    cell.bookImage.image = UIImage(named: "book")
+            }
+            } else if let data = image {
+                dump(data)
+                ImageHelper.fetchImageFromNetwork(urlString: data[0].volumeInfo.imageLinks.smallThumbnail, completion: { (appError, smallImage) in
+                    if let appError = appError {
+                        print("small thumbnail \(appError) error")
+                    } else if let smallImage = smallImage {
+                        DispatchQueue.main.async {
+                            cell.bookImage.image = smallImage
+                            cell.briefDescription.text = data[0].volumeInfo.description
+                        }
+                    }
+                })
+            }
+        }
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let mainStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
-        guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController else { fatalError("Detail View is nil") }
+        guard let bookCell = collectionView.cellForItem(at: indexPath) as? BestsellerCollectionViewCell else {return}
+        let book = bookInfo[indexPath.row]
+        let detailVC = DetailViewController()
+        detailVC.bookDetailInfo = book.book_details[0]
+        detailVC.detailView.bookDetailImage.image = bookCell.bookImage.image
+        detailVC.detailView.bookDetailDescription.text = bookCell.briefDescription.text
+        detailVC.detailView.bookDetailLabel.text = book.book_details.first?.author
+        navigationController?.pushViewController(detailVC, animated: true)
 
     }
 }
@@ -142,16 +176,3 @@ extension BestsellersViewController: UIPickerViewDelegate {
 
 
 
-//extension BestSellerViewController: UIPickerViewDataSource, UIPickerViewDelegate {
-//    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-//        return 1
-//    }
-//    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-//        return genreList.count
-//    }
-//    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-//        return genreList[row].list_name
-//    }
-//    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        getBooks(keyword: genreList[row].list_name.replacingOccurrences(of: " ", with: "-"))
-//}

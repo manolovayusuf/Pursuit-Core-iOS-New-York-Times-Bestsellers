@@ -36,26 +36,20 @@ class SettingsViewController: UIViewController {
     private func getPickerCategories() {
         NYTBookAPI.getBookCategories { (appError, results) in
             if let appError = appError {
-                print("App Error is \(appError)")
+                print("No categories in \(appError)")
             } else if let results = results {
                 self.settingPicker = results
+                if let rowSelected = (UserDefaults.standard.object(forKey: GenreKey.pickerRow) as? String) {
+                    DispatchQueue.main.async {
+                        self.settingsView.settingsPicker.selectRow(Int(rowSelected)!, inComponent: 0, animated: true)
+                    }
+                }
             }
         }
     }
 }
 
-public func setupBooks(genre: String) {
-    NYTBookAPI.bookResults(listName: genre) { (appError, bookNames) in
-        if let appError = appError {
-            print("App Error is \(appError)")
-        } else if let bookNames = bookNames {
-            self.bookInfo = bookNames
-            //dump(self.bookInfo)
-        }
-    }
-}
-
-extension SettingsViewController : UIPickerViewDataSource, UIPickerViewDelegate {
+extension SettingsViewController : UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -63,8 +57,16 @@ extension SettingsViewController : UIPickerViewDataSource, UIPickerViewDelegate 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return settingPicker.count
     }
+}
+
+extension SettingsViewController: UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return settingPicker[row].list_name
+    }
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        setupBooks(genre: settingPicker[row].list_name.replacingOccurrences(of: " ", with: "-"))
         
     }
+    
 }
+
