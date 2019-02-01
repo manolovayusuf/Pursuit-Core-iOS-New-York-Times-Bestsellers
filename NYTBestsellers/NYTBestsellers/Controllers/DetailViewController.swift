@@ -17,8 +17,8 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(detailView)
-        self.view.backgroundColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
+        self.view.addSubview(detailView)
+        
         navigationItem.title = bookDetailInfo?.title 
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "Favorites", style: .plain, target: self, action: #selector(favoriteBook))
         
