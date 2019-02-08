@@ -55,7 +55,7 @@ class DetailView: UIView {
         addSubview(bookDetailDescription)
         bookDetailDescription.translatesAutoresizingMaskIntoConstraints = false
         bookDetailDescription.topAnchor.constraint(equalTo: bookDetailLabel.bottomAnchor, constant: 55).isActive = true
-        bookDetailDescription.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -70).isActive = true
+        bookDetailDescription.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
         bookDetailDescription.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         bookDetailDescription.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
     }

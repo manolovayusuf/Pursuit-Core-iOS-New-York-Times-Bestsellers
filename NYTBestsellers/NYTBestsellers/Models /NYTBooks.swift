@@ -17,7 +17,7 @@ struct NYTBestsellers: Codable {
         let display_name: String
         let rank: Int
         let rank_last_week: Int
-        let weeks_on_list: Int
+        let weeks_on_list: Int 
         let amazon_product_url: String
         let book_details: [BookDetail]
     }
@@ -31,7 +31,5 @@ struct NYTBestsellers: Codable {
         let price: Double
         let publisher: String
         let primary_isbn13: String
-//        let letprimary_isbn10: String
-        
     }
 

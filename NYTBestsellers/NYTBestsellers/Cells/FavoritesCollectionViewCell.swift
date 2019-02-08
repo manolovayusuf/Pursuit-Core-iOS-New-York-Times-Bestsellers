@@ -21,12 +21,15 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         label.text =  "Days on the bestseller list"
         label.isEnabled = true
         label.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        label.textAlignment = .center
         return label
     }()
     
     public lazy var favoriteDescription: UITextField = {
         let text = UITextField()
         text.text = "Favorite blurb"
+        text.textAlignment = .center
+        text.font = UIFont.boldSystemFont(ofSize: 20)
         return text
     }()
     
@@ -41,7 +44,6 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         
     }
     
-    ////NEEDS WORK/////
     func setFavoriteImage(){
         addSubview(favoriteImage)
         favoriteImage.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +53,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         favoriteImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.6).isActive = true
         
     }
-    ////SET CONSTRAINTS/////
+
     func setupFavoriteLabel() {
         addSubview(favoriteLabel)
         favoriteLabel.translatesAutoresizingMaskIntoConstraints = false

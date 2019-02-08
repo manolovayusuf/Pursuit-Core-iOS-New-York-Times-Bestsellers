@@ -10,8 +10,16 @@ import UIKit
 
 class FavoritesViewController: UIViewController {
 
-    var favoriteView = FavoriteView()
+    public var favoriteView = FavoriteView()
     
+    public var favoriteBook = [Books]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.favoriteView.reloadInputViews()
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0.649716258, green: 0.5847206712, blue: 0.960396111, alpha: 1)
@@ -19,7 +27,14 @@ class FavoritesViewController: UIViewController {
         favoriteView.favoriteCollection.dataSource = self
         favoriteView.favoriteCollection.delegate = self
         view.addSubview(favoriteView)
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getFavoriteBooks()
+    }
+    
+    func getFavoriteBooks() {
+        //favoriteBook
     }
 }
 extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -28,7 +43,7 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Favorite", for: indexPath) as? FavoriteCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCell", for: indexPath) as? FavoriteCollectionViewCell else {
             return UICollectionViewCell()}
         return cell
         

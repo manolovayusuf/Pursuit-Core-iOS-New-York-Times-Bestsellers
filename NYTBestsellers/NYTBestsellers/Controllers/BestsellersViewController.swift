@@ -87,13 +87,6 @@ private func getPickerCategories() {
         }
     }
     
-//    private func getBookImage() {
-//
-//    }
-
-    
-    
-    
 private func setPickerCategories() {
     NYTBookAPI.getBookCategories { (appError, results) in
         if let appError = appError {

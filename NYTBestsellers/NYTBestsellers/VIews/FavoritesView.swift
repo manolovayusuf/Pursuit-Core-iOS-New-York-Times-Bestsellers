@@ -17,18 +17,12 @@ class FavoriteView: UIView {
         
         layout.scrollDirection = .vertical
         
-        
-        
+
         let cv = UICollectionView.init(frame: frame, collectionViewLayout: layout)
         cv.register(FavoriteCollectionViewCell.self, forCellWithReuseIdentifier: "Favorite")
         cv.backgroundColor = .white
         return cv
-        
-        
     }()
-    
-    
-    
     
     func setupCellView() {
         addSubview(favoriteCollection)
@@ -40,6 +34,7 @@ class FavoriteView: UIView {
     }
     
     private func commonInit() {
+        self.favoriteCollection.register(FavoriteCollectionViewCell.self, forCellWithReuseIdentifier: "FavoriteCell")
         setupCellView()
     }
     
