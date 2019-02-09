@@ -14,6 +14,12 @@ class BestsellersViewController: UIViewController {
         didSet {
             DispatchQueue.main.async {
                 self.bestseller.bookPicker.reloadAllComponents()
+                if let chosenCategory = UserDefaults.standard.value(forKey: UserDefaultsKeys.settingsPickerValue) as? Int {
+                    self.bestseller.bookPicker.selectRow(chosenCategory, inComponent: 0, animated: true)
+                    self.setupBooks(genre: self.genrePicker[chosenCategory].display_name)
+                } else {
+                    print("no category in defaults")
+                }
             }
         }
     }
@@ -71,7 +77,6 @@ private func getPickerCategories() {
                 print("App Error is \(appError)")
             } else if let bookNames = bookNames {
                 self.bookInfo = bookNames
-                dump(self.bookInfo)
             }
         }
     }
@@ -163,9 +168,14 @@ extension BestsellersViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         setupBooks(genre: genrePicker[row].list_name.replacingOccurrences(of: " ", with: "-"))
-        
     }
 }
 
+extension BestsellersViewController: SettingsViewControllerDelegate {
+    func settingsPicker(row: Int) {
+        self.bestseller.bookPicker.selectRow(row, inComponent: 0, animated: true)
+        setupBooks(genre: genrePicker[row].display_name) //find correct type
+    }
+}
 
 

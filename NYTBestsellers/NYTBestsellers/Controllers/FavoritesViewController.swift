@@ -47,12 +47,24 @@ extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewD
         cell.favoriteImage.image = UIImage(data: allFavorites.imageData)
         cell.favoriteLabel.text = allFavorites.author
         cell.favoriteDescription.text = allFavorites.description
+        cell.alertButton.tag = indexPath.row
+        print(indexPath.row)
         cell.alertButton.addTarget(self, action: #selector(alertButtonPressed), for: .touchUpInside)
         return cell
     }
     
-    @objc func alertButtonPressed() {
-        
+    @objc func alertButtonPressed(sender: FavoriteCollectionViewCell) {
+        print(sender.tag)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let  deleteAction = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) -> Void in
+            FavoritesModel.deleteFavorites(atIndex: sender.tag)
+            self.favoriteBook = FavoritesModel.getBooks()
+            self.favoriteView.favoriteCollection.reloadData()
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 
